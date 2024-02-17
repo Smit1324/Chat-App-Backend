@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 
-const DB_NAME = require("../constants");
-
-mongoose.connect(`${process.env.DATABASE_URI}/${DB_NAME}`)
+mongoose.connect(`${process.env.DATABASE_URI}`)
     .then(() => {
         console.log("CONNECTION SUCCESSFUL");
         require('../app');
