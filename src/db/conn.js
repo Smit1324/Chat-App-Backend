@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const DB_NAME = require('../constants');
+const DB_NAME = require("../constants");
 
 mongoose.connect(`${process.env.DATABASE_URI}/${DB_NAME}`)
     .then(() => {
