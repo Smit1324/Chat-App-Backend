@@ -19,9 +19,9 @@ const generateAccessTokenAndRefreshToken = async (userId) => {
 }
 
 const register = async (req, res) => {
-    const { username, email, password,confirmPassword } = req.body
+    const { username, fullName, email, password, confirmPassword } = req.body
 
-    if (!username || !email || !password) return res.status(400).json({ message: "Please fill all the credentials" })
+    if (!username || !fullName || !email || !password) return res.status(400).json({ message: "Please fill all the credentials" })
 
     if (password !== confirmPassword) return res.status(400).json({ message: "Passwords do not match" })
 
@@ -33,7 +33,7 @@ const register = async (req, res) => {
 
         const avatar = req.file?.path
 
-        await User.create({ username, avatar, email, password })
+        await User.create({ username, fullName, email, password })
 
         return res.status(201).json({ message: "User created successfully" })
 
@@ -87,7 +87,42 @@ const login = async (req, res) => {
     }
 }
 
+const logout = async (req, res) => {
+    try {
+
+        await User.findByIdAndUpdate(
+            req.user?._id,
+            {
+
+                $unset: {
+                    refreshToken: 1
+                }
+
+            },
+            {
+                new: true
+            }
+        )
+
+        const options = {
+            httpOnly: true,
+            secure: true
+        }
+
+        return res
+            .status(200)
+            .clearCookie("accessToken", options)
+            .clearCookie("refreshToken", options)
+            .json({ message: "User logged out successfully" })
+
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+}
+
 module.exports = {
     register,
-    login
+    login,
+    logout
 }
