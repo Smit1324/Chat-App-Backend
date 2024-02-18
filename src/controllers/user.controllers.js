@@ -19,9 +19,11 @@ const generateAccessTokenAndRefreshToken = async (userId) => {
 }
 
 const register = async (req, res) => {
-    const { username, email, password } = req.body
+    const { username, email, password,confirmPassword } = req.body
 
     if (!username || !email || !password) return res.status(400).json({ message: "Please fill all the credentials" })
+
+    if (password !== confirmPassword) return res.status(400).json({ message: "Passwords do not match" })
 
     try {
 
