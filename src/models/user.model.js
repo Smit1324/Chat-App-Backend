@@ -11,6 +11,12 @@ const userSchema = new mongoose.Schema({
         trim: true,
         index: true
     },
+    fullName: {
+        type: String,
+        required: true,
+        trim: true,
+        index: true
+    },
     avatar: {
         type: String,
         default: "RUKO_JARA_SABRA_KARO"
