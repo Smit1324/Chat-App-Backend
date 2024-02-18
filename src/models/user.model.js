@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
-        default: "RUKO_JARA_SABRA_KARO"
+        default: ""
     },
     email: {
         type: String,
