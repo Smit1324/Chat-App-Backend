@@ -1,4 +1,5 @@
 const User = require("../models/user.model")
+const uploadOnCloudinary = require("../utils/cloudinary")
 
 const generateAccessTokenAndRefreshToken = async (userId) => {
     try {
@@ -31,7 +32,19 @@ const register = async (req, res) => {
 
         if (existingUser) return res.status(400).json({ message: "User already exists" })
 
-        const avatar = req.file?.path
+        const avatarLocalPath = req.file?.path
+
+        if (avatarLocalPath) {
+
+            const avatar = await uploadOnCloudinary(avatarLocalPath)
+
+            if (!avatar) return res.status(500).json({ message: "Failed to upload avatar" })
+
+            await User.create({ username, fullName, avatar, email, password })
+
+            return res.status(201).json({ message: "User created successfully" })
+
+        }
 
         await User.create({ username, fullName, email, password })
 
